@@ -3,28 +3,30 @@ module game
 implicit none
 private
 
-integer :: i, cards(52), debug
+logical :: debug
 
-public :: cards, debug, mix, hand
+public :: debug, mix, hand
 
 contains
 
 
-integer function hand() result(win)
+integer function hand(cards) result(win)
 
-integer :: P,D,pace,dace,cnt
+integer, intent(inout) :: cards(52)
+integer :: P,D,pace,dace,cnt,i
 character :: yesno
 
+i=1
 P=0
 D=0
 PACE=0
 DACE=0
 WIN=0
 
-call hit(P,PACE)
-call hit(D,DACE)
-call hit(P,PACE)
-call hit(D,DACE)
+call hit(P,PACE,i,cards)
+call hit(D,DACE,i,cards)
+call hit(P,PACE,i,cards)
+call hit(D,DACE,i,cards)
 cnt = 0
 
 print '(A,I2)', 'Dealer shows: ',cards(i-1)
@@ -40,7 +42,7 @@ else
      read(*,'(A1)') yesno
      if (yesno /= 'y') exit
 
-     call hit(p,pace)
+     call hit(p,pace,i,cards)
      cnt = cnt+1
      print '(A,I2,A,I1)', 'Player ',P,' # of Aces: ',pace
      if (p > 21) then
@@ -70,7 +72,7 @@ endif
 
 print '(A,I2)', 'Dealer has ', D
 do while (D <= 16)
-  call hit(d,dace)
+  call hit(d,dace,i,cards)
   print '(A,I2)', 'Dealer has ', D
   if (d > 21) then
     print *,'Dealer busts - Player wins'
@@ -90,13 +92,14 @@ endif
 end function hand
 
 
-subroutine hit(total, aces)
+subroutine hit(total, aces, i, cards) bind(c)
 
 implicit none
 
-integer, intent(inout) :: total, aces
+integer, intent(inout) :: total, aces, i
+integer, intent(inout) :: cards(52)
 
-if (debug == 1) then
+if (debug) then
   write(*,'(A)', advance='no') 'input next card'
   read(*,'(I2)') cards(i)
 endif
@@ -116,15 +119,15 @@ endif
 end subroutine hit
 
 
-integer function mix()
+subroutine mix(cards) bind(c)
 ! knuth shuffle
 ! https://www.rosettacode.org/wiki/Knuth_shuffle#Fortran
 
-real :: r
-dimension :: mix(52)
+integer, intent(out) :: cards(52)
 integer :: i, j, temp
+real :: r
 
-mix = &
+cards = &
 [2,2,2,2, &
  3,3,3,3, &
  4,4,4,4, &
@@ -136,31 +139,15 @@ mix = &
  10,10,10,10, 10,10,10,10, 10,10,10,10, 10,10,10,10, &
  11,11,11,11]
 
-do i = size(mix), 2, -1
+do i = size(cards), 2, -1
   call random_number(r)
   j = int(r * i) + 1
-  temp = mix(j)
-  mix(j) = mix(i)
-  mix(i) = temp
+  temp = cards(j)
+  cards(j) = cards(i)
+  cards(i) = temp
 end do
 
-end function mix
+end subroutine mix
 
 
 end module game
-
-
-program blackjack
-
-use game
-implicit none
-
-integer :: win
-
-debug = 0
-
-cards = mix()
-print '(52I3)', cards
-win = hand()
-
-end program
