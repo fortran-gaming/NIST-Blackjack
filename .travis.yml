@@ -1,10 +1,12 @@
-language: c
+language: python
 group: travis_latest
 dist: xenial
 
 git:
   depth: 25
   quiet: true
+
+python: 3.7
 
 env: FC=gfortran
 
@@ -16,15 +18,6 @@ addons:
 matrix:
   include:
   - os: linux
-#  - os: osx
-#    before_install:
- #   - brew update > /dev/null
- #   - brew install gcc > /dev/null
-#  - os: windows
-#    install:
-#    - cd build
-#    - cmake -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" ..
-#    - cmake --build .
 
 install:
   - cd $TRAVIS_BUILD_DIR/build
