@@ -1,0 +1,35 @@
+language: c
+group: travis_latest
+dist: xenial
+
+git:
+  depth: 25
+  quiet: true
+
+env: FC=gfortran
+
+addons:
+  apt:
+#    sources: ubuntu-toolchain-r-test
+    packages: gfortran
+
+matrix:
+  include:
+  - os: linux
+#  - os: osx
+#    before_install:
+ #   - brew update > /dev/null
+ #   - brew install gcc > /dev/null
+#  - os: windows
+#    install:
+#    - cd build
+#    - cmake -G "MinGW Makefiles" -DCMAKE_SH="CMAKE_SH-NOTFOUND" ..
+#    - cmake --build .
+
+install:
+  - cd $TRAVIS_BUILD_DIR/build
+  - cmake ..
+  - cmake --build .
+
+script: ctest --output-on-failure
+

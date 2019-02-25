@@ -13,7 +13,7 @@ contains
 integer function hand(cards) result(win)
 
 integer, intent(inout) :: cards(52)
-integer :: P,D,pace,dace,cnt,i
+integer :: P,D,pace,dace,cnt,i,ios
 character :: yesno
 
 i=1
@@ -39,7 +39,8 @@ else
    cnt = 2
    do
      write(*,'(A)', advance='no') 'Hit?  y / n  '
-     read(*,'(A1)') yesno
+     read(*,'(A1)',iostat=ios) yesno
+     if(ios /= 0) stop 'Goodbye'
      if (yesno /= 'y') exit
 
      call hit(p,pace,i,cards)

@@ -33,6 +33,8 @@ count = 2;
 while (1) {
 printf("hit? ");
 int fHit = getchar();
+printf("%d", fHit);
+if (fHit == -1) return -1;
 getchar(); // discard EOF
 
 if (fHit != 'y') break;
