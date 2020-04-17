@@ -1,4 +1,5 @@
-project('Blackjack', 'c', 'fortran', default_options : ['default_library=static'])
+project('Blackjack', 'c', 'fortran',
+default_options : ['default_library=static'])
 
 blackjack = library('blackjack', 'blackjack.f90')
 executable('c_blackjack', 'blackjack.c', link_with : blackjack)

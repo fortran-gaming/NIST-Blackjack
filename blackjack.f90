@@ -1,19 +1,21 @@
 module game
 
+use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit
+use, intrinsic :: iso_c_binding, only: c_int
+
 implicit none
 private
+public :: debug, mix, hand
 
 logical :: debug
-
-public :: debug, mix, hand
 
 contains
 
 
-integer function hand(cards) result(win)
+integer(c_int) function hand(cards) result(win)
 
-integer, intent(inout) :: cards(52)
-integer :: P,D,pace,dace,cnt,i,ios
+integer(c_int), intent(inout) :: cards(52)
+integer(c_int) :: P,D,pace,dace,cnt,i,ios
 character :: yesno
 
 i=1
@@ -38,9 +40,9 @@ if (p == 21) then
 else
    cnt = 2
    do
-     write(*,'(A)', advance='no') 'Hit?  y / n  '
-     read(*,'(A1)',iostat=ios) yesno
-     if(ios /= 0) stop 'Goodbye'
+     write(stdout,'(A)', advance='no') 'Hit?  y / n  '
+     read(stdin, '(A1)',iostat=ios) yesno
+     if(is_iostat_end(ios)) stop 'Goodbye'
      if (yesno /= 'y') exit
 
      call hit(p,pace,i,cards)
@@ -97,12 +99,12 @@ subroutine hit(total, aces, i, cards) bind(c)
 
 implicit none
 
-integer, intent(inout) :: total, aces, i
-integer, intent(inout) :: cards(52)
+integer(c_int), intent(inout) :: total, aces, i
+integer(c_int), intent(inout) :: cards(52)
 
 if (debug) then
-  write(*,'(A)', advance='no') 'input next card'
-  read(*,'(I2)') cards(i)
+  write(stdout,'(A)', advance='no') 'input next card'
+  read(stdin, '(I2)') cards(i)
 endif
 
 total = total + cards(i)
@@ -124,8 +126,8 @@ subroutine mix(cards) bind(c)
 ! knuth shuffle
 ! https://www.rosettacode.org/wiki/Knuth_shuffle#Fortran
 
-integer, intent(out) :: cards(52)
-integer :: i, j, temp
+integer(c_int), intent(out) :: cards(52)
+integer(c_int) :: i, j, temp
 real :: r
 
 cards = &

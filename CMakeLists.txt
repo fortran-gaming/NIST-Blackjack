@@ -1,11 +1,22 @@
-cmake_minimum_required(VERSION 3.1)
-project(Blackjack C Fortran)
+cmake_minimum_required(VERSION 3.12)
+
+project(Blackjack
+LANGUAGES C Fortran)
+
 enable_testing()
 
-add_library(blackjack blackjack.f90)
+if(CMAKE_Fortran_COMPILER_ID STREQUAL GNU)
+  add_compile_options(-Wall -Wextra)
+  string(APPEND CMAKE_Fortran_FLAGS " -fimplicit-none")
+elseif(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
+  string(APPEND CMAKE_Fortran_FLAGS "-stand f18 -warn")
+endif()
+
+add_library(blackjack OBJECT blackjack.f90)
 
 add_executable(c_blackjack blackjack.c)
 target_link_libraries(c_blackjack blackjack)
+set_target_properties(c_blackjack PROPERTIES LINKER_LANGUAGE C)  # needed for Ifort
 
 add_executable(f_blackjack main.f90)
 target_link_libraries(f_blackjack blackjack)
@@ -19,5 +30,4 @@ if(Python3_FOUND)
   add_test(NAME Fortran
     COMMAND Python3::Interpreter -m pytest -k fortran -v
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests)
-
 endif()
