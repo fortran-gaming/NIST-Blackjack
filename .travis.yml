@@ -1,12 +1,11 @@
 language: python
 group: travis_latest
-dist: xenial
 
 git:
   depth: 25
   quiet: true
 
-python: 3.7
+python: 3.8
 
 env: FC=gfortran
 
@@ -19,10 +18,12 @@ matrix:
   include:
   - os: linux
 
+before_install: pip install cmake
+
 install:
-  - cd $TRAVIS_BUILD_DIR/build
-  - cmake ..
-  - cmake --build .
+- cmake -B build
+- cmake --build build
 
-script: ctest --output-on-failure
-
+script:
+- cd build
+- ctest -V
