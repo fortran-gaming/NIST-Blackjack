@@ -1,11 +1,16 @@
 program blackjack
 
+use, intrinsic :: iso_c_binding, only: c_int
 use game
-implicit none
+implicit none (external)
 
-integer :: win, cards(52)
+integer(c_int) :: win, cards(52)
+character(2) :: argv
+integer :: i
 
 debug = .false.
+call get_command_argument(1, argv, status=i)
+if(i==0 .and. argv=='-d') debug = .true.
 
 call mix(cards)
 print '(52I3)', cards

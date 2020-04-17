@@ -3,7 +3,7 @@ module game
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit
 use, intrinsic :: iso_c_binding, only: c_int
 
-implicit none
+implicit none (external)
 private
 public :: debug, mix, hand
 
@@ -97,13 +97,11 @@ end function hand
 
 subroutine hit(total, aces, i, cards) bind(c)
 
-implicit none
-
 integer(c_int), intent(inout) :: total, aces, i
 integer(c_int), intent(inout) :: cards(52)
 
 if (debug) then
-  write(stdout,'(A)', advance='no') 'input next card'
+  write(stdout,'(A)', advance='no') 'input next card: '
   read(stdin, '(I2)') cards(i)
 endif
 

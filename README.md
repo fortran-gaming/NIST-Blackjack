@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.com/fortran-gaming/NIST-Blackjack.svg?branch=master)](https://travis-ci.com/fortran-gaming/NIST-Blackjack)
-
 # NIST Blackjack
+
+[![Build Status](https://travis-ci.com/fortran-gaming/NIST-Blackjack.svg?branch=master)](https://travis-ci.com/fortran-gaming/NIST-Blackjack)
 
 For a study on cyclomatic complexity and methods to detect errors, Fortran and C code were provided by NIST.
 That code had syntax errors bad enough to not compile in contemporary compilers, so the syntax errors were fixed.
@@ -10,17 +10,25 @@ algorithm for this.
 
 ## Build
 
-Any Fortran and C compiler is fine.
-
 ```sh
-cd build
+cmake -B build
 
-cmake ..
-
-cmake --build .
+cmake --build build
 ```
 
+Then run the respective programs by
 
+```sh
+build/f_blackjack
+```
+
+or
+
+```sh
+build/c_blackjack
+```
+
+For `f_blackjack` the command line flag `-d` enables debug mode, where you can set the value of the next card.
 
 ## Implementations
 
