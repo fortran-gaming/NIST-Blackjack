@@ -1,6 +1,6 @@
 # NIST Blackjack
 
-[![Build Status](https://travis-ci.com/fortran-gaming/NIST-Blackjack.svg?branch=master)](https://travis-ci.com/fortran-gaming/NIST-Blackjack)
+![Actions Status](https://github.com/fortran-gaming/NIST-blackjack/workflows/ci/badge.svg)
 
 For a study on cyclomatic complexity and methods to detect errors, Fortran and C code were provided by NIST.
 That code had syntax errors bad enough to not compile in contemporary compilers, so the syntax errors were fixed.
