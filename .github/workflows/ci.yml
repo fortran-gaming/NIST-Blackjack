@@ -17,8 +17,6 @@ jobs:
       with:
         python-version: '3.x'
 
-    - run: pip install pytest
-
     - run: cmake -B build
     - run: cmake --build build
 

@@ -31,12 +31,12 @@ target_link_libraries(f_blackjack PRIVATE blackjack)
 find_package(Python 3.7 COMPONENTS Interpreter)
 
 add_test(NAME C
-  COMMAND Python::Interpreter -m pytest -k c -v
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.py $<TARGET_FILE:c_blackjack>
+)
 
 add_test(NAME Fortran
-  COMMAND Python::Interpreter -m pytest -k fortran -v
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.py $<TARGET_FILE:f_blackjack>
+)
 
 set_tests_properties(C Fortran PROPERTIES
 TIMEOUT 10
