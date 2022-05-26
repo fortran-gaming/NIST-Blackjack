@@ -28,17 +28,25 @@ add_executable(f_blackjack app/main.f90)
 target_include_directories(f_blackjack PRIVATE ${PROJECT_BINARY_DIR}/include)
 target_link_libraries(f_blackjack PRIVATE blackjack)
 
-find_package(Python 3.7 COMPONENTS Interpreter)
+# find_package(Python 3.7 COMPONENTS Interpreter)
+
+# add_test(NAME C
+# COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.py $<TARGET_FILE:c_blackjack>
+# )
+
+# add_test(NAME Fortran
+# COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.py $<TARGET_FILE:f_blackjack>
+# )
 
 add_test(NAME C
-COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.py $<TARGET_FILE:c_blackjack>
+COMMAND ${CMAKE_COMMAND} -Dexe:FILEPATH=$<TARGET_FILE:c_blackjack> -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.cmake
 )
 
 add_test(NAME Fortran
-COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.py $<TARGET_FILE:f_blackjack>
+COMMAND ${CMAKE_COMMAND} -Dexe:FILEPATH=$<TARGET_FILE:f_blackjack> -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.cmake
 )
 
 set_tests_properties(C Fortran PROPERTIES
 TIMEOUT 10
-DISABLED $<NOT:$<BOOL:${Python_FOUND}>>
+#DISABLED $<NOT:$<BOOL:${Python_FOUND}>>
 )
