@@ -3,11 +3,12 @@ module game
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit
 use, intrinsic :: iso_c_binding, only: c_int
 
-implicit none (external)
+implicit none (type, external)
 private
-public :: debug, mix, hand
 
 logical :: debug
+
+public :: debug, mix, hand
 
 contains
 
