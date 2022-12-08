@@ -3,7 +3,7 @@ program blackjack
 use, intrinsic :: iso_c_binding, only: c_int
 use game, only : mix, hand, debug
 
-implicit none (type, external)
+implicit none
 
 integer(c_int) :: win, cards(52)
 character(2) :: argv

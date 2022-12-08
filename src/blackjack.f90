@@ -3,7 +3,7 @@ module game
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit
 use, intrinsic :: iso_c_binding, only: c_int
 
-implicit none (type, external)
+implicit none
 private
 
 logical :: debug
