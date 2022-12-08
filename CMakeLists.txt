@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15...3.24)
+cmake_minimum_required(VERSION 3.13...3.25)
 
 project(Blackjack
 LANGUAGES C Fortran
@@ -6,7 +6,13 @@ LANGUAGES C Fortran
 
 enable_testing()
 
-if(CMAKE_Fortran_COMPILER_ID STREQUAL GNU)
+# --- auto-ignore build directory
+if(NOT EXISTS ${PROJECT_BINARY_DIR}/.gitignore)
+  file(WRITE ${PROJECT_BINARY_DIR}/.gitignore "*")
+endif()
+
+
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
   add_compile_options(-Wall -Wextra
   $<$<COMPILE_LANGUAGE:Fortran>:-fimplicit-none>
   )
@@ -22,21 +28,11 @@ add_library(blackjack OBJECT src/blackjack.f90)
 
 add_executable(c_blackjack src/blackjack.c)
 target_link_libraries(c_blackjack PRIVATE blackjack)
-set_target_properties(c_blackjack PROPERTIES LINKER_LANGUAGE C)  # needed for Ifort
+set_property(TARGET c_blackjack PROPERTY LINKER_LANGUAGE C)  # needed for Ifort
 
 add_executable(f_blackjack app/main.f90)
 target_include_directories(f_blackjack PRIVATE ${PROJECT_BINARY_DIR}/include)
 target_link_libraries(f_blackjack PRIVATE blackjack)
-
-# find_package(Python 3.7 COMPONENTS Interpreter)
-
-# add_test(NAME C
-# COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.py $<TARGET_FILE:c_blackjack>
-# )
-
-# add_test(NAME Fortran
-# COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.py $<TARGET_FILE:f_blackjack>
-# )
 
 add_test(NAME C
 COMMAND ${CMAKE_COMMAND} -Dexe:FILEPATH=$<TARGET_FILE:c_blackjack> -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.cmake
@@ -44,9 +40,4 @@ COMMAND ${CMAKE_COMMAND} -Dexe:FILEPATH=$<TARGET_FILE:c_blackjack> -P ${CMAKE_CU
 
 add_test(NAME Fortran
 COMMAND ${CMAKE_COMMAND} -Dexe:FILEPATH=$<TARGET_FILE:f_blackjack> -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.cmake
-)
-
-set_tests_properties(C Fortran PROPERTIES
-TIMEOUT 10
-#DISABLED $<NOT:$<BOOL:${Python_FOUND}>>
 )
