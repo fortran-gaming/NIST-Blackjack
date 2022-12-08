@@ -18,7 +18,7 @@ if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
   )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^Intel")
   add_compile_options(
-  $<$<COMPILE_LANGUAGE:Fortran>-warn>
+  $<$<COMPILE_LANGUAGE:Fortran>:-warn>
   )
 endif()
 
