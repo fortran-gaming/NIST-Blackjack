@@ -40,7 +40,7 @@ The 1996 NIST 500-235
 [publication](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication500-235.pdf)
 "Structured Testing: A Testing Methodology Using the Cyclomatic Complexity Metric"
 tries to do a line-by-line conversion from Fortran.
-We fixed the syntax errors in [blackjack.c](./blackjack.c) and use the Fortran implementations of Mix and Hit in the C program.
+We fixed the syntax errors in blackjack.c and use the Fortran implementations of Mix and Hit in the C program.
 
 ### Fortran 90
 
