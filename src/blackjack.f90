@@ -2,6 +2,7 @@ module game
 
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit
 use, intrinsic :: iso_c_binding, only: c_int
+use shuffler, only : knuth_shuffle
 
 implicit none
 private
@@ -122,12 +123,8 @@ end subroutine hit
 
 
 subroutine mix(cards) bind(c)
-! knuth shuffle
-! https://www.rosettacode.org/wiki/Knuth_shuffle#Fortran
 
 integer(c_int), intent(out) :: cards(52)
-integer(c_int) :: i, j, temp
-real :: r
 
 cards = &
 [2,2,2,2, &
@@ -141,13 +138,7 @@ cards = &
  10,10,10,10, 10,10,10,10, 10,10,10,10, 10,10,10,10, &
  11,11,11,11]
 
-do i = size(cards), 2, -1
-  call random_number(r)
-  j = int(r * i) + 1
-  temp = cards(j)
-  cards(j) = cards(i)
-  cards(i) = temp
-end do
+call knuth_shuffle(cards)
 
 end subroutine mix
 

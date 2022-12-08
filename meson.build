@@ -1,9 +1,10 @@
 project('Blackjack', 'c', 'fortran')
 
-blackjack = library('blackjack', 'app/blackjack.f90')
+blackjack = library('blackjack',
+sources: ['src/blackjack.f90', 'src/shuffler.f90'])
 
-executable('c_blackjack', 'blackjack.c', link_with : blackjack)
-executable('f_blackjack', 'main.f90', link_with : blackjack)
+executable('c_blackjack', 'src/blackjack.c', link_with : blackjack)
+executable('f_blackjack', 'app/main.f90', link_with : blackjack)
 
 py3 = find_program('python3')
 

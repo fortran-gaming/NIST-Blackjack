@@ -9,6 +9,8 @@ integer(c_int) :: win, cards(52)
 character(2) :: argv
 integer :: i
 
+call random_init(.false., .false.)
+
 debug = .false.
 call get_command_argument(1, argv, status=i)
 if(i==0 .and. argv=='-d') debug = .true.
