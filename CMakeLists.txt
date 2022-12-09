@@ -43,3 +43,7 @@ COMMAND ${CMAKE_COMMAND} -Dexe:FILEPATH=$<TARGET_FILE:c_blackjack> -P ${CMAKE_CU
 add_test(NAME Fortran
 COMMAND ${CMAKE_COMMAND} -Dexe:FILEPATH=$<TARGET_FILE:f_blackjack> -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.cmake
 )
+
+# random order
+add_executable(rand_order app/rand_order.f90)
+target_link_libraries(rand_order PRIVATE shuffler)
