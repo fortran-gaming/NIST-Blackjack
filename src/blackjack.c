@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h> // for printf and getchar
+#include <stdlib.h> // for EXIT_SUCCESS
 
 extern void hit(int*, int*, int*, int []);
 
@@ -22,103 +22,77 @@ printf("DEALER SHOWS --- %d\n", cards[i-1]);
 printf("PLAYER = %d, NO OF ACES - %d\n", p, pace);
 
 if (p == 21) {
-
-printf("PLAYER HAS BLACKJACK\n");
-
-win = 1;
+  printf("PLAYER HAS BLACKJACK\n");
+  win = 1;
 } else {
+  count = 2;
+  while (1) {
+    printf("hit? (y/n) ");
+    int fHit = getchar();
+    // printf("%d", fHit);
+    if (fHit == -1) return -1;
+    getchar(); // discard EOF
 
-count = 2;
+    if (fHit != 'y') break;
 
-while (1) {
-printf("hit? ");
-int fHit = getchar();
-printf("%d", fHit);
-if (fHit == -1) return -1;
-getchar(); // discard EOF
+    hit(&p,&pace,&i, &cards[0]);
 
-if (fHit != 'y') break;
+    count += 1;
 
-hit(&p,&pace,&i, &cards[0]);
+    printf("PLAYER = %d, NO OF ACES - %d\n", p, pace);
 
-count += 1;
-
-printf("PLAYER = %d, NO OF ACES - %d\n", p, pace);
-
-if (p > 21) {
-
-printf("PLAYER BUSTS - DEALER WINS\n");
-
-return win;
-}
-
-}
-
+    if (p > 21) {
+      printf("PLAYER BUSTS - DEALER WINS\n");
+      return win;
+    }
+  }
 }
 /* Handle blackjack situations, case when dealer has blackjack */
 
 if (d == 21) {
+  printf("DEALER HAS BJ\n");
 
-printf("DEALER HAS BJ\n");
-
-if (win == 1) {
-
-printf("------ PUSH\n");
-
-win = 2;
-
-return win;
+  if (win == 1) {
+    printf("------ PUSH\n");
+    win = 2;
+    return win;
+  } else {
+    printf("DEALER AUTOMATICALLY WINS\n");
+    return win;
+  }
 } else {
+  /* case where dealer doesn't have blackjack:
+  * check for player blackjack or five card hand
+  */
 
-printf("DEALER AUTOMATICALLY WINS\n");
-
-return win;
-
-}
-} else {
-/* case where dealer doesn't have blackjack:
-* check for player blackjack or five card hand
-*/
-
-if (p == 21 || count >= 5) {
-
-printf("PLAYER AUTOMATICALLY WINS\n");
-
-win = 1;
-
-return win;
-}
-
+  if (p == 21 || count >= 5) {
+    printf("PLAYER AUTOMATICALLY WINS\n");
+    win = 1;
+    return win;
+  }
 }
 
 printf("DEALER HAS %d\n", d);
 
 
 while (d <= 16) {
-
-hit(&d,&dace,&i, &cards[0]);
-
-if (d > 21) {
-
-printf("DEALER BUSTS - PLAYER WINS\n");
-
-win = 1;
-
-return win;
-}
-
+  hit(&d,&dace,&i, &cards[0]);
+  if (d > 21) {
+    printf("DEALER BUSTS - PLAYER WINS\n");
+    win = 1;
+    return win;
+  }
 }
 
 printf(" PLAYER = %d DEALER = %d\n", p, d);
 
 if (p > d) {
-
-printf("PLAYER WINS\n");
-
-win = 1;
-} else
-
-printf("DEALER WINS\n");
+  printf("PLAYER WINS\n");
+  win = 1;
+} else {
+  printf("DEALER WINS\n");
+  win = 0;
+}
 
 return win;
 
@@ -139,6 +113,6 @@ int win = hand(cards);
 
 printf("Win code: %d \n", win);
 
-return 0;
+return EXIT_SUCCESS;
 
 }

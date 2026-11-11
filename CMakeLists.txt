@@ -6,35 +6,27 @@ LANGUAGES C Fortran
 
 enable_testing()
 
-# --- auto-ignore build directory
-if(NOT EXISTS ${PROJECT_BINARY_DIR}/.gitignore)
-  file(WRITE ${PROJECT_BINARY_DIR}/.gitignore "*")
-endif()
-
+file(GENERATE OUTPUT .gitignore CONTENT "*")
 
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
-  add_compile_options(-Wall -Wextra
-  $<$<COMPILE_LANGUAGE:Fortran>:-fimplicit-none>
+  add_compile_options($<$<COMPILE_LANGUAGE:Fortran>:-fimplicit-none>
+  "$<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<CONFIG:Debug>>:-Wall;-Wextra>"
   )
-elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^Intel")
-  add_compile_options(
-  $<$<COMPILE_LANGUAGE:Fortran>:-warn>
-  )
+elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "IntelLLVM")
+  add_compile_options($<$<COMPILE_LANGUAGE:Fortran>:-warn>)
 endif()
 
-set(CMAKE_Fortran_MODULE_DIRECTORY ${PROJECT_BINARY_DIR}/include)
-
-add_library(shuffler OBJECT src/shuffler.f90)
+add_library(shuffler src/shuffler.f90)
 add_library(blackjack OBJECT src/blackjack.f90)
-target_link_libraries(blackjack PRIVATE shuffler)
+target_include_directories(blackjack PUBLIC $<TARGET_PROPERTY:Fortran_MODULE_DIRECTORY>)
+target_link_libraries(blackjack PUBLIC shuffler)
 
 add_executable(c_blackjack src/blackjack.c)
-target_link_libraries(c_blackjack PRIVATE blackjack shuffler)
-set_property(TARGET c_blackjack PROPERTY LINKER_LANGUAGE C)  # needed for Ifort
+target_link_libraries(c_blackjack PRIVATE blackjack)
+set_property(TARGET c_blackjack PROPERTY LINKER_LANGUAGE C)  # needed for IntelLLVM
 
 add_executable(f_blackjack app/main.f90)
-target_include_directories(f_blackjack PRIVATE ${PROJECT_BINARY_DIR}/include)
-target_link_libraries(f_blackjack PRIVATE blackjack shuffler)
+target_link_libraries(f_blackjack PRIVATE blackjack)
 
 add_test(NAME C
 COMMAND ${CMAKE_COMMAND} -Dexe:FILEPATH=$<TARGET_FILE:c_blackjack> -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/test_hit.cmake

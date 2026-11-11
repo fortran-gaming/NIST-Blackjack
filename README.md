@@ -4,9 +4,7 @@
 
 For a study on cyclomatic complexity and methods to detect errors, Fortran and C code were provided by NIST.
 That code had syntax errors bad enough to not compile in contemporary compilers, so the syntax errors were fixed.
-Also, function "Mix" that shuffles the cards was not defined in the article; we provide
-[Fisher-Yates Shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle)
-algorithm for this.
+Also, function "Mix" that shuffles the cards was not defined in the article; we provide Knuth Shuffle algorithm for shuffling.
 
 ## Build
 
@@ -32,7 +30,7 @@ For `f_blackjack` the command line flag `-d` enables debug mode, where you can s
 
 ## Implementations
 
-As noted in the summary, we provided syntax corrections to the original code, which was not usable otherwise
+As noted in the summary, we provided syntax corrections to the original code, which was not usable otherwise.
 
 ### C
 
@@ -48,5 +46,9 @@ The
 [1982 NIST 500-99 publication](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nbsspecialpublication500-99.pdf)
 "Structured Testing: A Software Testing Methodology Using the Cyclomatic Complexity Metric"
 did a legacy FORTRAN implementation that was needlessly verbose and wasn't easily usable from C.
-We minimally updated the NIST blackjack code to Fortran 90 syntax, using Fortran 2003 `bind(c)` for convenience, as is generally recommended.
-The [reusable code](./blackjack.f90) and main Fortran [program](./main.f90) are provided here and compatible with any Fortran compiler.
+We minimally updated the NIST blackjack code to Fortran 90 syntax, using Fortran 2003 `bind(c)`.
+The
+[reusable code](./blackjack.f90)
+and main Fortran
+[program](./main.f90)
+are provided.

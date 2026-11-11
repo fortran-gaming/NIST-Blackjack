@@ -37,7 +37,7 @@ print '(A,I2)', 'Dealer shows: ',cards(i-1)
 print '(A,I2,A,I1)', 'Player total: ',P,' incl. # of Aces: ',pace
 
 if (p == 21) then
-   print *, 'Player Blackjack!'
+   print '(a)', 'Player Blackjack!'
    win = 1
 else
    cnt = 2
@@ -51,25 +51,25 @@ else
      cnt = cnt+1
      print '(A,I2,A,I1)', 'Player ',P,' # of Aces: ',pace
      if (p > 21) then
-       print *, 'player busts -- dealer wins'
+       print '(a)', 'Player busts -- Dealer wins'
        return
      endif
    enddo
 endif
 
 if (d == 21) then
-  print *, 'Dealer Blackjack'
+  print '(a)', 'Dealer Blackjack'
   if (win == 1) then
-    print *,' ---- Push'
+    print '(a)',' ---- Push'
     win = 2
     return
   else
-    print *, 'Dealer automatically wins'
+    print '(a)', 'Dealer automatically wins'
     return
   endif
 else
   if ((p == 21) .or. (cnt >= 5)) then
-    print *, 'Player automatically wins'
+    print '(a)', 'Player automatically wins'
     win = 1
     return
   endif
@@ -80,7 +80,7 @@ do while (D <= 16)
   call hit(d,dace,i,cards)
   print '(A,I2)', 'Dealer has ', D
   if (d > 21) then
-    print *,'Dealer busts - Player wins'
+    print '(a)','Dealer busts - Player wins'
     win = 1
     return
   endif
@@ -88,10 +88,10 @@ enddo
 
 print '(A,I2,A,I2)', 'Player: ',P,' Dealer: ',D
 if (p > d) then
-  print *,'Player wins'
+  print '(a)','Player wins'
   win = 1
 else
-  print *, 'Dealer wins'
+  print '(a)', 'Dealer wins'
 endif
 
 end function hand

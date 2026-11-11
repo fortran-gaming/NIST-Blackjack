@@ -16,7 +16,9 @@ call get_command_argument(1, argv, status=i)
 if(i==0 .and. argv=='-d') debug = .true.
 
 call mix(cards)
-print '(52I3)', cards
+
+if (debug) print '(52I3)', cards
+
 win = hand(cards)
 
 end program
